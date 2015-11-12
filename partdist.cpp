@@ -126,7 +126,7 @@ double normpd(vector<pair<int, int> > pqmatrix, int n, int cost)
 		return EXIT_FAILURE;
 	}
 	
-	cout << "pdmax=" << pdmax << "\n";
+	//cout << "pdmax=" << pdmax << "\n";
 	
 	//normalize the pd
 	c = ( cost / pdmax );
@@ -150,8 +150,10 @@ int main( int argc, char* argv[] )
 	std::string ein(e);
 	std::string gin(g);
 
+	/*
 	cout << "ein>" << ein << "<\n";
 	cout << "gin>" << gin << "<\n";
+	*/
 	
 	//load the space-delimited string into a vector<int>
 	std::vector<int> gen = strtovec(gin);
@@ -165,6 +167,7 @@ int main( int argc, char* argv[] )
 		return EXIT_FAILURE;
 	}	
 
+	/*
 	cout << "env.size()>" << env.size() << "<\n";
 	for (unsigned int i=0; i<env.size(); ++i) {cout << env[i] << " : ";}
 	cout << "\n";
@@ -172,22 +175,19 @@ int main( int argc, char* argv[] )
 	cout << "gen.size()>" << gen.size() << "<\n";
 	for (unsigned int i=0; i<gen.size(); ++i) {cout << gen[i] << " : ";}
 	cout << "\n";
+	*/
 	
 	//zero index partition coding in env, gen.  make values consecutive.
-	vector<int> genZ, envZ;
-	genZ = zeroInd(gen);
-	envZ = zeroInd(env);
-
-	vector<int> a = envZ;
-	vector<int> b = genZ;
+	vector<int> b = zeroInd(gen);
+	vector<int> a = zeroInd(env);
 	
-	
+	/*
 	cout << "env  ";
 	for (unsigned int k=0;k<a.size();k++) cout << a[k];
 	cout << endl << "gen  ";
 	for (unsigned int k=0;k<b.size();k++) cout << b[k];
 	cout << endl;
-	
+	*/
 		
 	//identify largest cluster number in either partition (this is the maximum number of clusters, minus one, because partition is now zero-indexed)
 	int maxP;
@@ -287,7 +287,7 @@ int main( int argc, char* argv[] )
 	cost = Lmunkres(sumx);
 	//cost = Lmunkres(sumx, outf);
 		
-	cout << "pd=" << cost << "\n";
+	//cout << "pd=" << cost << "\n";
 	
 	//normalize the partition distance to the maximum value possible given the partitions
 	//add paired max number of subsets to pqmatrix 
@@ -297,8 +297,8 @@ int main( int argc, char* argv[] )
 	//calculate the max number of partitions, then normalize the pd
 	double npd = normpd(pqmatrix, n, cost);
 	
-	cout << "npd=" << npd << "\n";
-
+	//cout << "npd=" << npd << "\n";
+	cout << npd << "\n";
 
 
 

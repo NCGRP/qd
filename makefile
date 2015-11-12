@@ -4,7 +4,7 @@ FLAGS = -O3 -Wall
 
 
 all: partdist.o Lmunkres.o Hungarian.o BipartiteGraph.o
-	${CXX} ${FLAGS} testpartdist.o partdist.o Lmunkres.o Hungarian.o BipartiteGraph.o -o pdtest
+	${CXX} ${FLAGS} partdist.o Lmunkres.o Hungarian.o BipartiteGraph.o -o pd
 
 partdist.o: partdist.cpp partdist.hpp
 	${CXX} ${FLAGS} -c partdist.cpp

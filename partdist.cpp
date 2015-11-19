@@ -138,14 +138,26 @@ double normpd(vector<pair<int, int> > pqmatrix, int n, int cost)
 
 /***************MAIN*****************/
 int main( int argc, char* argv[] )
-
-//int partdist( vector<int> env, vector<int> gen )
-//int partdist( vector<int> env, vector<int> gen, ofstream& outf, vector<pair<int, int> >& pqmatrix )
 {
-	//extract the partitions from the command line
-	const char* e = argv[1];
-	const char* g = argv[2];
+	//declare initial variables
+	std::string DoNorm;
+	const char* e;
+	const char* g;
 	
+	//parse the command line for options
+	if ( string(argv[1]) == "-n" ) 
+    	{
+        	DoNorm = "yes"; //key to normalize or not
+ 			e = argv[2]; //partition 1
+			g = argv[3]; //partition 2
+ 		}
+		else
+		{
+        	DoNorm = "no";
+ 			e = argv[1];
+			g = argv[2];
+		}
+	//extract the partitions presented on the command line into vectors
 	//convert to string
 	std::string ein(e);
 	std::string gin(g);
@@ -285,21 +297,23 @@ int main( int argc, char* argv[] )
 	//uses the bipartite graph approach to Kuhn-Munkres algorithm
 	int cost;
 	cost = Lmunkres(sumx);
-	//cost = Lmunkres(sumx, outf);
-		
-	//cout << "pd=" << cost << "\n";
 	
-	//normalize the partition distance to the maximum value possible given the partitions
-	//add paired max number of subsets to pqmatrix 
-	vector<pair<int, int> > pqmatrix;
-	pqmatrix.push_back( make_pair(amax+1, bmax+1) );
-	int n = gen.size(); //n is the number of samples in the partition
-	//calculate the max number of partitions, then normalize the pd
-	double npd = normpd(pqmatrix, n, cost);
+	if ( DoNorm == "yes" )
+	{
+		//normalize the partition distance to the maximum value possible given the partitions
+		//add paired max number of subsets to pqmatrix 
+		vector<pair<int, int> > pqmatrix;
+		pqmatrix.push_back( make_pair(amax+1, bmax+1) );
+		int n = gen.size(); //n is the number of samples in the partition
+		//calculate the max number of partitions, then normalize the pd
+		double npd = normpd(pqmatrix, n, cost);
 	
-	//cout << "npd=" << npd << "\n";
-	cout << npd << "\n";
-
+		cout << npd << "\n";
+	}
+	else
+	{
+		cout << cost << "\n";
+	}
 
 
 	return 0;

@@ -7,6 +7,7 @@
 #include <sstream>
 #include <string>
 #include <vector>
+#include <algorithm>
 #include "partdist.hpp"
 using namespace std;
 
@@ -17,20 +18,46 @@ using namespace std;
 
 
 /***************SUBROUTINES*****************/
+
+//test whether values in command line are integers
+bool isnum(const std::string& s)
+{
+    std::string str1 = s;
+    str1.erase(std::remove(str1.begin(), str1.end(), ' '),
+               str1.end());
+ 
+	return !str1.empty() && str1.find_first_not_of("0123456789") == std::string::npos;
+}
+
 //convert the string defining the partition from the command line into a vector containing the same.
 vector<int> strtovec(std::string foo)
 {
 	//replace the commas with spaces in partitions
 	std::replace(foo.begin(), foo.end(), ',', ' ');
+	
+	//test that all values are integers
+	
+	if ( isnum(foo) )
+	{
+		//stream foo into vector 'result' using iterators and back inserter trick
+		std::vector<int> result;
+		std::istringstream inputStream(foo);
+		std::copy(std::istream_iterator<int>(inputStream),
+			  std::istream_iterator<int>(),
+			  std::back_inserter(result));
 
-	//stream foo into vector 'result' using iterators and back inserter trick
-	std::vector<int> result;
-	std::istringstream inputStream(foo);
-	std::copy(std::istream_iterator<int>(inputStream),
-          std::istream_iterator<int>(),
-          std::back_inserter(result));
+		return result;
+	}
+	//proceed with the conversion of string to vector
+	else
+	{
+		std::vector<int> errvec; //on error from integer test, returns a vector with error codes
+		errvec.push_back(-9);
+		errvec.push_back(-9);
+		return errvec;  
+	}
+	
 
-	return result;
 }
 
 //change a partition that starts at >1 to a partition that starts at 0
@@ -103,6 +130,8 @@ double normpd(vector<pair<int, int> > pqmatrix, int n, int cost)
 		p = double(genmax);
 		q = double(envmax);
 	}
+	
+	//cout << "p=" << p << " q=" << q << " n=" << n << "\n";
 
 	//calculate max possible partition distance, 3 cases
 	if (n <= (p + q - 2)) 
@@ -167,9 +196,17 @@ int main( int argc, char* argv[] )
 	cout << "gin>" << gin << "<\n";
 	*/
 	
-	//load the space-delimited string into a vector<int>
+	
+	//load the comma-delimited string into a vector<int>
 	std::vector<int> gen = strtovec(gin);
 	std::vector<int> env = strtovec(ein);
+	
+	//test whether the vectors contain an error code, indicating that not all input was in integer form
+	if ( ( gen[1] == -9 ) || ( env[1] == -9 ) )
+	{
+		cout << "ERROR: There are non-integer values in the partition definitions. Quitting...\n";
+		return EXIT_FAILURE;
+	}
 	
 	//test whether the partitions hold the same number of values. if not, quit, because it
 	//makes no sense to calculate pd in this case

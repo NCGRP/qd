@@ -3,8 +3,14 @@ CXX = g++
 FLAGS = -O3 -Wall
 
 
-all: partdist.o Lmunkres.o Hungarian.o BipartiteGraph.o
-	${CXX} ${FLAGS} partdist.o Lmunkres.o Hungarian.o BipartiteGraph.o -o pd
+all: main.o qdist.o partdist.o Lmunkres.o Hungarian.o BipartiteGraph.o
+	${CXX} ${FLAGS} main.o qdist.o partdist.o Lmunkres.o Hungarian.o BipartiteGraph.o -o qd
+
+main.o: main.cpp main.hpp
+	${CXX} ${FLAGS} -c main.cpp
+
+qdist.o: qdist.cpp
+	${CXX} ${FLAGS} -c qdist.cpp
 
 partdist.o: partdist.cpp partdist.hpp
 	${CXX} ${FLAGS} -c partdist.cpp

@@ -8,10 +8,9 @@
 #include <string>
 #include <vector>
 #include <algorithm>
+#include "main.hpp"
 #include "partdist.hpp"
 using namespace std;
-
-//to compile: g++ partdist.cpp Lmunkres.cpp BipartiteGraph.cpp Hungarian.cpp -o partdist
 
 
 /***************GLOBAL VARIABLES*****************/
@@ -166,26 +165,8 @@ double normpd(vector<pair<int, int> > pqmatrix, int n, int cost)
 }
 
 /***************MAIN*****************/
-int main( int argc, char* argv[] )
+int partdist( const char* e, const char* g, std::string DoNorm )
 {
-	//declare initial variables
-	std::string DoNorm;
-	const char* e;
-	const char* g;
-	
-	//parse the command line for options
-	if ( string(argv[1]) == "-n" ) 
-    	{
-        	DoNorm = "yes"; //key to normalize or not
- 			e = argv[2]; //partition 1
-			g = argv[3]; //partition 2
- 		}
-		else
-		{
-        	DoNorm = "no";
- 			e = argv[1];
-			g = argv[2];
-		}
 	//extract the partitions presented on the command line into vectors
 	//convert to string
 	std::string ein(e);
@@ -195,7 +176,6 @@ int main( int argc, char* argv[] )
 	cout << "ein>" << ein << "<\n";
 	cout << "gin>" << gin << "<\n";
 	*/
-	
 	
 	//load the comma-delimited string into a vector<int>
 	std::vector<int> gen = strtovec(gin);
